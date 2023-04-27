@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FoodRecipeApp</string>
+    <string name="facebook_app_id">1174424263267004</string>
+    <string name="fb_login_protocol_scheme">fb1174424263267004</string>
+    <string name="facebook_client_token">b685bb781f01d95fa996a1d3be946aca</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+</resources>
