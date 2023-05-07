@@ -28,6 +28,7 @@ class NavigationDrawerFragment : Fragment(R.layout.fragment_navigation_drawer) {
 
     public lateinit var drawer: DrawerLayout
     public lateinit var navigationView: NavigationView
+    public lateinit var toggle: ActionBarDrawerToggle
 
     private lateinit var profileImage: ImageView
 
@@ -43,12 +44,13 @@ class NavigationDrawerFragment : Fragment(R.layout.fragment_navigation_drawer) {
 
         drawer = view.findViewById(R.id.drawer_layout)
 
-        val toggle = ActionBarDrawerToggle(
+        toggle = ActionBarDrawerToggle(
             requireActivity(), drawer, toolbar,
             R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
+
 
         var navigationView = drawer.findViewById<NavigationView>(R.id.nav_view)!!
 
@@ -61,6 +63,7 @@ class NavigationDrawerFragment : Fragment(R.layout.fragment_navigation_drawer) {
                             .setPositiveButton("Log Out") { dialog, which ->
                                 // sign out the user
                                 FirebaseAuth.getInstance().signOut()
+                                LoginManager.getInstance().logOut()
                                 // navigate to the login screen
                                 val intent = Intent(context, MainActivity::class.java)
                                 startActivity(intent)
@@ -76,7 +79,11 @@ class NavigationDrawerFragment : Fragment(R.layout.fragment_navigation_drawer) {
 
                 }
                 R.id.nav_share -> {
-
+                    val sharingIntent = Intent(Intent.ACTION_SEND)
+                    sharingIntent.type = "text/plain"
+                    sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Sharing Example")
+                    sharingIntent.putExtra(Intent.EXTRA_TEXT, "Check out this recipe channel I found: https://www.youtube.com/@VillageCookingChannel")
+                    startActivity(Intent.createChooser(sharingIntent, "Share via"))
                 }
                 else -> false
             }
