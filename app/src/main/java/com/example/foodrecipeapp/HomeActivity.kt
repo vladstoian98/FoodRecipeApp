@@ -2,56 +2,39 @@ package com.example.foodrecipeapp
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.ActionBarDrawerToggle
+import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 
 class RecyclerActivity : AppCompatActivity() {
-    private lateinit var adapter: FoodTypeAdapter
-    private lateinit var exampleList: MutableList<FoodType>
-    private lateinit var recyclerView: RecyclerView
     private lateinit var drawerFragment: NavigationDrawerFragment
 
     @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler_view)
-        fillExampleList()
-        setUpRecyclerView()
+
+        val webView = findViewById<WebView>(R.id.webView)
+        webView.settings.javaScriptEnabled = true
+
+        val youtubeVideoUrl = "https://www.youtube.com/embed/g6dv1MKGfB0"
+        val iframeHtml = """<iframe width="390" height="200" src="$youtubeVideoUrl" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>"""
+        webView.loadData(iframeHtml, "text/html", "utf-8")
+
+
         drawerFragment = supportFragmentManager.findFragmentById(R.id.navigation_drawer_fragment) as NavigationDrawerFragment
-
+//        drawerFragment.drawer.bringToFront()
     }
 
-    private fun fillExampleList() {
-        exampleList = mutableListOf(
-            FoodType(R.drawable.pasta, "Pasta"),
-            FoodType(R.drawable.pizza, "Pizza"),
-            FoodType(R.drawable.kung_pao_chicken, "Kung Pao Chicken"),
-            FoodType(R.drawable.dim_sum, "Dim sum"),
-            FoodType(R.drawable.sarmale, "Sarmale"),
-            FoodType(R.drawable.soup, "Soup"),
-        )
-    }
-
-    private fun setUpRecyclerView() {
-        recyclerView = findViewById(R.id.recycler_view)
-        recyclerView.setHasFixedSize(true)
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this@RecyclerActivity, LinearLayoutManager.VERTICAL, false)
-        adapter = FoodTypeAdapter(exampleList)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter
-        recyclerView.isVerticalScrollBarEnabled = true
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
@@ -69,7 +52,6 @@ class RecyclerActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                adapter.filter.filter(newText)
                 return false
             }
         })
